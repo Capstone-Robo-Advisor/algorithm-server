@@ -1,0 +1,12 @@
+# .gitignore
+
+# IDE 설정
+.idea
+
+# Python 캐시
+*.pyc
+*.pyo
+*.pyd
+
+# 가상환경
+venv
