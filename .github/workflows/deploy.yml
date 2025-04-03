@@ -35,8 +35,8 @@ jobs:
             git pull origin main
 
             # Docker 컨테이너 재시작
-            docker stop algo-container || true
-            docker rm algo-container || true
-            docker build -t algo-image .
-            docker run -d --name algo-container -p 8000:8000 algo-image
+            sudo docker stop algo-container || true
+            sudo docker rm algo-container || true
+            sudo docker build -t algo-image .
+            sudo docker run -d --name algo-container -p 8000:8000 algo-image
           EOF
