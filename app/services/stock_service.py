@@ -3,51 +3,15 @@ from typing import List, Dict, Any, Optional
 import pandas as pd
 import numpy as np
 
+import requests
+import os
+from dotenv import load_dotenv
+
+# 환경 변수에서 API 키 로드
+load_dotenv()
+FMP_API_KEY = os.getenv("FMP_API_KEY")
+
 class StockService:
-    @staticmethod
-    def search_stocks(query: str, limit: int = 10) -> List[Dict[str, Any]]:
-        """
-        검색어와 일치하는 주식 심볼을 찾아 기본 정보를 반환합니다.
-        """
-        # 실제 구현에서는 보다 완전한 심볼 DB를 사용해야 함
-        all_tickers = ["QQQ", "TQQQ", "QQQW", "AAPL", "TSLA", "GOOGL", "MSFT", "AMZN", "META", "NVDA", "NFLX"]
-        matched = [t for t in all_tickers if query.upper() in t][:limit]
-        
-        results = []
-        for ticker in matched:
-            try:
-                stock = yf.Ticker(ticker)
-                hist = stock.history(period="2d")
-                
-                if hist.empty or len(hist) < 2:
-                    continue
-                    
-                close = hist['Close'].iloc[-1]
-                prev = hist['Close'].iloc[-2]
-                diff = close - prev
-                percent = (diff / prev) * 100
-                
-                # 기업 정보 추가
-                info = stock.info
-                name = info.get("shortName", ticker)
-                
-                # NumPy boolean을 Python boolean으로 변환
-                is_positive = bool(diff > 0)
-                
-                results.append({
-                    "ticker": ticker,
-                    "name": name,
-                    "close_price": round(float(close), 2),
-                    "diff": round(float(diff), 2),
-                    "percent": round(float(percent), 2),
-                    "is_positive": is_positive
-                })
-            except Exception:
-                # 에러 발생 시 해당 종목 건너뛰기
-                continue
-                
-        return results
-    
     @staticmethod
     def get_stock_details(ticker: str) -> Dict[str, Any]:
         """
@@ -55,7 +19,7 @@ class StockService:
         """
         stock = yf.Ticker(ticker)
         info = stock.info
-        
+
         # 주요 지표 계산
         hist = stock.history(period="1mo")
         if not hist.empty:
@@ -66,7 +30,7 @@ class StockService:
             current_price = float(info.get("currentPrice", 0))
             ma_50 = None
             ma_200 = None
-        
+
         # NumPy 타입 변환 확인
         return {
             "ticker": ticker,
@@ -85,7 +49,7 @@ class StockService:
             "ma_200": round(ma_200, 2) if ma_200 is not None else None,
             "description": info.get("longBusinessSummary", "No description available.")
         }
-    
+
     @staticmethod
     def get_chart_data(ticker: str, period: str = "1y", interval: str = "1d") -> List[Dict[str, Any]]:
         """
@@ -93,10 +57,10 @@ class StockService:
         """
         stock = yf.Ticker(ticker)
         hist = stock.history(period=period, interval=interval)
-        
+
         if hist.empty:
             return []
-        
+
         # DataFrame을 JSON 형식으로 변환
         result = []
         for index, row in hist.iterrows():
@@ -108,5 +72,98 @@ class StockService:
                 "close": float(round(row["Close"], 2)) if not pd.isna(row["Close"]) else None,
                 "volume": int(row["Volume"]) if not pd.isna(row["Volume"]) else 0
             })
-            
+
         return result
+
+    @staticmethod
+    def search_stocks_with_fmp(query: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """FMP API를 사용하여 주식 검색
+        :param query: 검색할 주식 심볼 또는 회사명
+        :param limit: 반환할 최대 결과 수
+        :return: 검색된 주식 정보 목록
+        """
+        try:
+            # FMP API 호출로 주식 검색
+            url = f"https://financialmodelingprep.com/api/v3/search?query={query}&limit={limit}&apikey={FMP_API_KEY}"
+            response = requests.get(url)
+
+            if response.status_code != 200:
+                print(f"FMP API 호출 실패: {response.status_code}")
+                return []
+
+            data = response.json()
+
+            # 검색 결과가 없으면 빈 리스트 반환
+            if not data:
+                return []
+
+            results = []
+
+            # 각 검색 결과에 대해 필요한 정보만 가져오기
+            for item in data:
+                ticker = item.get("symbol")
+
+                # 실시간 시세 정보 가져오기
+                try:
+                    quote_url = f"https://financialmodelingprep.com/api/v3/quote/{ticker}?apikey={FMP_API_KEY}"
+                    quote_response = requests.get(quote_url)
+
+                    if quote_response.status_code == 200:
+                        quote_data = quote_response.json()
+                        if quote_data:
+                            quote = quote_data[0]
+                            price = quote.get("price", 0)
+                            change = quote.get("change", 0)
+
+                            # UI에 필요한 정보만 포함
+                            results.append({
+                                "ticker": ticker,
+                                "name": item.get("name", ""),
+                                "price": round(float(price), 2),
+                                "change": round(float(change), 2),
+                                "change_percent": round(float(quote.get("changesPercentage", 0)), 2),
+                                "is_positive": change > 0
+                            })
+                except Exception as e:
+                    print(f"주식 {ticker}의 시세 정보 가져오기 실패: {str(e)}")
+
+            return results
+
+        except Exception as e:
+            print(f"FMP API를 통한 주식 검색 실패: {str(e)}")
+            return []
+
+    @staticmethod
+    def get_stock_details_with_fmp(ticker: str) -> Dict[str, Any]:
+        """FMP API를 사용하여 특정 주식의 정보 가져오기
+        :param ticker: 주식 심볼
+        :return: 주식 정보
+        """
+        try:
+            # 시세 정보 가져오기
+            quote_url = f"https://financialmodelingprep.com/api/v3/quote/{ticker}?apikey={FMP_API_KEY}"
+            quote_response = requests.get(quote_url)
+
+            if quote_response.status_code != 200:
+                raise Exception(f"API 호출 실패: {quote_response.status_code}")
+                
+            quote_data = quote_response.json()
+            
+            if not quote_data:
+                raise Exception("주식 정보를 찾을 수 없습니다.")
+                
+            quote = quote_data[0]
+            
+            # 필요한 정보만 반환
+            return {
+                "ticker": ticker,
+                "name": quote.get("name", ""),
+                "price": quote.get("price", 0),
+                "change": quote.get("change", 0),
+                "change_percent": quote.get("changesPercentage", 0),
+                "is_positive": quote.get("change", 0) > 0
+            }
+
+        except Exception as e:
+            print(f"주식 {ticker} 정보 가져오기 실패: {str(e)}")
+            raise Exception(f"주식 정보를 가져오는 중 오류 발생: {str(e)}")
