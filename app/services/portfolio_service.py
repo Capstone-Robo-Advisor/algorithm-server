@@ -119,3 +119,4 @@ class PortfolioService:
             "total_profit_loss_percent": round(total_profit_loss_percent, 2),
             "stocks": stocks_data
         }
+
