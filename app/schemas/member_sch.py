@@ -26,7 +26,7 @@ class MemberCreate(MemberBase):
 class Member(MemberBase):
     id: int
     created_at: datetime
-    updated_at: datetime
+    update_at: datetime
 
     class Config:
         orm_mode = True
