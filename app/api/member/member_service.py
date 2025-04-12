@@ -1,6 +1,6 @@
 # app/services/member_service.py
 from sqlalchemy.orm import Session
-from app.models.member import Member
+from app.domain.member import Member
 from typing import Optional, Type
 
 

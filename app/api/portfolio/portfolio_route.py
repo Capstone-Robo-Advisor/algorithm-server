@@ -1,7 +1,7 @@
-from fastapi import APIRouter, HTTPException, Body, Query
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-from app.services.portfolio_service import PortfolioService
+from typing import List
+from app.api.portfolio.portfolio_service import PortfolioService
 
 router = APIRouter()
 

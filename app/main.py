@@ -1,7 +1,17 @@
 from fastapi import FastAPI
-from app.routers import member_route, stock_router, portfolio_route
+from app.api.stock import stock_router
+from app.api.portfolio import portfolio_route
+from app.api.member import member_route
 
-app = FastAPI()
+app = FastAPI(
+    title="AI-Based Portfolio Builder",
+    openapi_tags=[
+        {
+            "name" : "Stocks",
+            "description" : "주식 검색 API (일부는 레거시입니다)"
+        }
+    ]
+)
 
 # 라우터 등록
 app.include_router(member_route.router, prefix="/api", tags=["Members"])
