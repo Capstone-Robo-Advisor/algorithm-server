@@ -25,11 +25,7 @@ DATABASE_URL = f"mysql+pymysql://{RDS_USER}:{RDS_PASSWORD}@{RDS_HOST}:{RDS_PORT}
 
 # 엔진 생성
 engine = create_engine(
-    DATABASE_URL,
-    pool_size=5,
-    max_overflow=10,
-    pool_timeout=30,
-    pool_recycle=1800,
+    DATABASE_URL
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
