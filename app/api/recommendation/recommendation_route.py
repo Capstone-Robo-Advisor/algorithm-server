@@ -3,10 +3,7 @@ from typing import List
 from app.api.recommendation.dto.recommendation_dto import PortfolioRequestDTO, PortfolioDTO
 from app.api.recommendation.recommendation_service import RecommendationService
 
-router = APIRouter(
-    prefix="/api/recommendations",
-    tags=["recommendations"]
-)
+router = APIRouter(tags=["recommendations"])
 
 
 @router.post("", response_model=List[PortfolioDTO])

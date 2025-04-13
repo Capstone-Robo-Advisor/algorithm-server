@@ -1,6 +1,10 @@
 import os
 import json
+import traceback
+
 import openai
+import re
+import logging
 
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
@@ -8,6 +12,10 @@ from dotenv import load_dotenv
 # 환경 변수 로드
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("gpt_service")
 
 class GPTService:
     @staticmethod
@@ -28,9 +36,13 @@ class GPTService:
             # API 키 설정
             client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
+            # 프롬프트 로깅
+            logger.info("GPT API 호출 준비: 테마=%s, 포트폴리오 수=%d", theme, portfolio_count)
+            logger.info("뉴스 기사 수: %d", len(news_articles))
+
             # 뉴스 기사 요약을 위한 전처리
             news_summaries = []
-            for article in news_articles[:5]:  # 상위 5개 기사만 사용
+            for article in news_articles[:5]:  # 상위 100개 기사 사용
                 title = article.get("title", "")
                 source = article.get("source", "")
                 published_date = article.get("published_date", "")
@@ -60,21 +72,23 @@ class GPTService:
 응답은 다음 JSON 형식으로 제공해주세요:
 ```json
 [
-  {
+  {{
     "name": "포트폴리오 1",
     "stocks": [
-      {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 25.0},
-      {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 25.0},
-      ...
+      {{"ticker": "AAPL", "name": "Apple Inc.", "allocation": 25.0}},
+      {{"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 25.0}}
     ],
     "description": "이 포트폴리오는 기술 섹터에 중점을 두고..."
-  },
-  ...
+  }}
 ]
 ```
 
 각 주식의 ticker(심볼)와 회사명(name)을 정확히 표기해주세요.
 """
+
+            # API 호출 직전 로깅
+            logger.info("GPT API 호출 시작...")
+
             # GPT API 호출
             response = client.chat.completions.create(
                 model="gpt-4",
@@ -87,27 +101,72 @@ class GPTService:
                 max_tokens=2000
             )
 
+            # GPT API 호출 결과 로딩
+            logger.info("GPT API 호출 완료: 응답 토큰 수 = %d", response.usage.completion_tokens)
+
+            # 응답 내용 로깅 (일부만)
+            content = response.choices[0].message.content
+            # 안전한 방식으로 로깅
+            # safe_preview = repr(content[:200] + "...")
+            # logger.info("GPT 응답 내용 (처음 200자):\n%s", safe_preview)
+
             # GPT 응답 파싱
             try:
-                content = response.choices[0].message.content
+                # json_str 변수 미리 초기화
+                json_str = ""
+                
+                # 디버깅용 파일에 응답 저장
+                try:
+                    with open("gpt_response.txt", "w") as f:
+                        f.write(content)
+                except:
+                    pass
+                
+                # 정규식을 사용한 JSON 추출
+                json_pattern = r"```(?:json)?\s*([\s\S]*?)```"
+                matches = re.findall(json_pattern, content)
 
-                # JSON 부분 추출 (마크다운 코드 블록에서)
-                json_str = content
-                if "```json" in content:
-                    json_str = content.split("```json")[1].split("```")[0].strip()
-                elif "```" in content:
-                    json_str = content.split("```")[1].split("```")[0].strip()
+                if matches:
+                    json_str = matches[0].strip()
+                    logger.info("✅ 코드 블록에서 JSON 추출 성공")
+                else:
+                    # 코드 블록이 없는 경우 전체 내용에서 JSON 형식 찾기
+                    json_str = content
+                    # 처음과 마지막 [ ] 찾기
+                    if '[' in json_str and ']' in json_str:
+                        start = json_str.find('[')
+                        end = json_str.rfind(']') + 1
+                        json_str = json_str[start:end]
+                        logger.info("전체 내용에서 [ ] 기반으로 JSON 추출")
+
+                # JSON 일부 출력 - 안전한 방식으로 로깅
+                logger.info("파싱할 JSON (처음 100자): %s", (json_str[:100] + "...") if len(json_str) > 100 else json_str)
+
+                # 디버깅용 파일에 추출된 JSON 저장
+                try:
+                    with open("extracted_json.txt", "w") as f:
+                        f.write(json_str)
+                except:
+                    pass
 
                 # JSON 파싱
                 portfolios = json.loads(json_str)
+                logger.info("JSON 파싱 성공: 포트폴리오 %d개 추출됨", len(portfolios))
                 return portfolios
 
             except Exception as e:
-                print(f"GPT 응답 파싱 실패: {str(e)}")
-                print(f"원본 응답: {content}")
-                # 파싱 실패 시 빈 결과 반환
+                error_json = "정의되지 않음"
+                if 'json_str' in locals() and json_str:
+                    # 오류 난 JSON의 시작 부분만 안전하게 출력
+                    error_json = json_str[:50] + "..." if len(json_str) > 50 else json_str
+                
+                logger.error("JSON 파싱 실패: %s", str(e))
+                # repr()을 사용하여 안전하게 출력
+                logger.error("파싱 시도한 문자열 시작 부분: %s", repr(error_json))
                 return []
 
         except Exception as e:
-            print(f"포트폴리오 추천 생성 실패 : {str(e)}")
+            # 안전한 방식으로 로깅
+            logger.error("GPT API 호출 또는 처리 중 오류 발생: " + repr(e))
+            logger.error(traceback.format_exc())
             return []

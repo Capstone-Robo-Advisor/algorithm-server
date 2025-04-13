@@ -1,7 +1,11 @@
+import logging
+
 from typing import List, Dict, Any
 from app.api.news.news_service import NewsService
 from app.common.gpt.gpt_service import GPTService
 
+# 로거 객체 선언
+logger = logging.getLogger(__name__)
 
 class RecommendationService:
     @staticmethod
@@ -22,10 +26,11 @@ class RecommendationService:
             포트폴리오 추천 목록
         """
         # 1. 뉴스 데이터 가져오기
-        news_articles = NewsService.get_recent_news(limit=10, theme=theme)
+        news_articles = NewsService.get_recent_news(limit=100, theme=theme)
 
         if not news_articles:
-            print(f"경고: '{theme}' 테마 관련 뉴스 기사를 찾을 수 없습니다.")
+            logger.warning(f"⚠️'{theme}' 테마 관련 뉴스 기사를 찾을 수 없습니다.")
+            news_articles = []
 
         # 2. GPT API를 사용하여 포트폴리오 추천 생성
         return await GPTService.generate_portfolio_recommendations(
