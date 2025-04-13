@@ -16,13 +16,16 @@ logger = logging.getLogger(__name__)
 
 class NewsService:
     @staticmethod
-    def get_recent_news(limit: int = 100, theme: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_recent_news(limit: int = 100, themes: List[str] = None) -> List[Dict[str, Any]]:
         """MongoDB 에서 최근 뉴스 기사를 가져옵니다
 
         :param limit: 가져올 기사 수
-        :param theme: 특정 테마 관련 기사 필터링
+        :param themes: 특정 테마 관련 기사 필터링
         :return: 뉴스 기사 목록 가져온다.
         """
+        if not themes:
+            return []
+
         try:
             client = MongoClient(MONGODB_URI)
             db = client["deepsearch_news"]
@@ -32,36 +35,40 @@ class NewsService:
             total_docs = collection.count_documents({})
             logger.info(f"전체 뉴스 기사 수 : {total_docs}")
 
+            all_theme_keywords = []
             # 테마 기반 필터링 쿼리 구성
-            query = {}
-            if theme:
-                # 테마 키워드 추가 및 확장
-                theme_keywords = {
-                    "에너지": ["energy", "oil", "gas", "renewable", "solar", "wind", "에너지", "석유", "가스", "재생에너지"],
-                    "반도체": ["semiconductor", "chip", "processor", "TSMC", "intel", "nvidia", "반도체", "칩", "프로세서"],
-                    # 한국어 키워드 추가 및 다양한 기술 관련 키워드 포함
-                    "기술": ["technology", "tech", "AI", "artificial intelligence", "software", "기술", "인공지능",
-                           "소프트웨어", "디지털", "IT", "정보기술", "빅데이터", "클라우드", "블록체인", "사물인터넷", "IoT"],
-                    "원자재": ["commodity", "material", "raw material", "mining", "metals", "원자재", "광물", "금속", "채굴"]
-                }
 
-                keywords = theme_keywords.get(theme, [theme])
-                logger.info(f"'{theme}' 테마 키워드: {keywords}")
+            # 테마 키워드 매핑 정의
+            theme_keywords_map = {
+                "에너지": ["energy", "oil", "gas", "renewable", "solar", "wind", "에너지", "석유", "가스", "재생에너지"],
+                "반도체": ["semiconductor", "chip", "processor", "TSMC", "intel", "nvidia", "반도체", "칩", "프로세서"],
+                "기술": ["technology", "tech", "AI", "artificial intelligence", "software", "기술", "인공지능",
+                       "소프트웨어", "디지털", "IT", "정보기술", "빅데이터", "클라우드", "블록체인", "사물인터넷", "IoT"],
+                "원자재": ["commodity", "material", "raw material", "mining", "metals", "원자재", "광물", "금속", "채굴"],
+                "금융": ["finance", "banking", "investment", "financial", "bank", "stocks", "금융", "은행", "투자", "주식", "펀드",
+                       "금융시장"]
+            }
 
-                # 여러 필드에 대해 키워드 검색
-                keyword_query = {"$or": []}
-                fields = ["title", "title_ko", "summary", "summary_ko"]
+            # 각 테마의 키워드를 통합 리스트에 추가
+            for theme in themes:
+                keywords = theme_keywords_map.get(theme, [theme])
+                all_theme_keywords.extend(keywords)
+                logger.info(f"'{theme}' 테마 키워드 추가: {keywords}")
 
-                for field in fields:
-                    for kw in keywords:
-                        keyword_query["$or"].append({field: {"$regex": kw, "$options": "i"}})
+            logger.info(f"통합된 키워드 수: {len(all_theme_keywords)}")
 
-                query = keyword_query
-                logger.info(f"MongoDB 쿼리: {keyword_query}")
+            # 모든 키워드에 대해 통합 쿼리 생성
+            keyword_query = {"$or": []}
+            for field in ["title", "title_ko", "summary", "summary_ko"]:
+                for kw in all_theme_keywords:
+                    keyword_query["$or"].append({field: {"$regex": kw, "$options": "i"}})
+
+            logger.info(f"다중 테마 쿼리 생성 완료. 쿼리 조건 수: {len(keyword_query['$or'])}")
+
 
             # 최신 기사부터 가져오기
-            articles = list(collection.find(query).sort("published_at", pymongo.DESCENDING).limit(limit))
-            logger.info(f"'{theme}' 테마 기사 찾음: {len(articles)}개")
+            articles = list(collection.find(keyword_query).sort("published_at", pymongo.DESCENDING).limit(limit))
+            logger.info(f"다중 테마 관련 기사 찾음: {len(articles)}개")
 
             # 결과가 없으면 필드 정보 출력
             if len(articles) == 0 and total_docs > 0:

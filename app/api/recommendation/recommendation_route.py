@@ -15,7 +15,7 @@ async def generate_portfolio_recommendations(request: PortfolioRequestDTO):
         portfolios = await RecommendationService.generate_portfolio_recommendations(
             portfolio_count=request.portfolio_count,
             stocks_per_portfolio=request.stocks_per_portfolio,
-            theme=request.theme
+            themes=request.theme
         )
 
         if not portfolios:
