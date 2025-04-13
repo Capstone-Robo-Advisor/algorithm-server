@@ -1,7 +1,17 @@
+import logging
+
 from fastapi import FastAPI
+
+from app.api.recommendation import recommendation_route
 from app.api.stock import stock_router
 from app.api.portfolio import portfolio_route
 from app.api.member import member_route
+
+# 전역 로깅 설정
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 
 app = FastAPI(
     title="AI-Based Portfolio Builder",
@@ -17,3 +27,4 @@ app = FastAPI(
 app.include_router(member_route.router, prefix="/api", tags=["Members"])
 app.include_router(stock_router.router, prefix="/stocks", tags=["Stocks"])
 app.include_router(portfolio_route.router, prefix="/portfolio", tags=["Portfolio"])
+app.include_router(recommendation_route.router, prefix="/api/recommendations", tags=["recommendations"])
