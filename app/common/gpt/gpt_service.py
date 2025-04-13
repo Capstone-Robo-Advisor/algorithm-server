@@ -52,6 +52,8 @@ class GPTService:
 
             news_text = "\n\n".join(news_summaries)
 
+
+
             #GPT에 전달할 프롬프트 구성
             prompt = f"""
 당신은 주식 포트폴리오 추천 전문가입니다. 다음 정보를 바탕으로 투자자에게 적합한 포트폴리오를 추천해주세요:
@@ -59,7 +61,7 @@ class GPTService:
 1. 투자자는 총 {portfolio_count}개의 포트폴리오를 구성하고 싶어합니다.
 2. 각 포트폴리오는 {stocks_per_portfolio}개의 주식으로 구성되어야 합니다.
 3. 투자자가 관심 있는 테마는 '{theme}'입니다.
-4. 다음은 최근 관련 뉴스 기사입니다:
+4. 다음은 최근 관련 뉴스 기사입니다:  
 
 {news_text}
 
