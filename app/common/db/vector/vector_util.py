@@ -24,6 +24,7 @@ class VectorUtil:
         return self._chroma_client
 
     # Chroma DB 컬렉션 받아 오기
+    # TODO: 오래된 기사 삭제 로직 추가하기(날짜 단위 파악하기)
     def get_collection(self):
         if self._collection is None:
             try:
