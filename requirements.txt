@@ -12,3 +12,5 @@ email-validator>=2.0.0  # 이메일 검증을 위해 추가
 python-dotenv>=1.0.0
 pymongo
 openai
+chromadb
+sentence-transformers
