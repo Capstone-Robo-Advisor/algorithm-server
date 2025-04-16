@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI
 
 from app.api.recommendation import recommendation_route
-from app.api.stock import stock_router
+from app.legacy.stock import stock_router
 from app.api.portfolio import portfolio_route
 from app.api.member import member_route
 

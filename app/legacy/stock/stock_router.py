@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Query, HTTPException
-from app.api.stock.stock_service import StockService
+from app.legacy.stock.stock_service import StockService
 
 router = APIRouter()
 
