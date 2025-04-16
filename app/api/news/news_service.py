@@ -14,6 +14,7 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 # 로거 객체 선언
 logger = logging.getLogger(__name__)
 
+# TODO: ChromaDB로 받아오는 걸로 바꾸기
 class NewsService:
     @staticmethod
     def get_recent_news(limit: int = 100, themes: List[str] = None) -> List[Dict[str, Any]]:
