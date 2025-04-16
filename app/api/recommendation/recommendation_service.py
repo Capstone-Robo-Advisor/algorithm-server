@@ -12,10 +12,9 @@ class RecommendationService:
     async def generate_portfolio_recommendations(
             portfolio_count: int,
             stocks_per_portfolio: int,
-            theme: str
+            themes: List[str]
     ) -> List[Dict[str, Any]]:
-        """
-        포트폴리오 추천을 생성합니다.
+        """포트폴리오 추천을 생성합니다.
 
         Args:
             portfolio_count: 생성할 포트폴리오 수
@@ -26,16 +25,16 @@ class RecommendationService:
             포트폴리오 추천 목록
         """
         # 1. 뉴스 데이터 가져오기
-        news_articles = NewsService.get_recent_news(limit=100, theme=theme)
+        news_articles = NewsService.get_recent_news(limit=100, themes=themes)
 
         if not news_articles:
-            logger.warning(f"⚠️'{theme}' 테마 관련 뉴스 기사를 찾을 수 없습니다.")
+            logger.warning(f"⚠️'{themes}' 테마 관련 뉴스 기사를 찾을 수 없습니다.")
             news_articles = []
 
         # 2. GPT API를 사용하여 포트폴리오 추천 생성
         return await GPTService.generate_portfolio_recommendations(
             portfolio_count=portfolio_count,
             stocks_per_portfolio=stocks_per_portfolio,
-            theme=theme,
+            themes=themes,
             news_articles=news_articles
         )

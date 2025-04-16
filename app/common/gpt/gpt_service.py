@@ -22,7 +22,7 @@ class GPTService:
     async def generate_portfolio_recommendations(
             portfolio_count: int,
             stocks_per_portfolio: int,
-            theme: str,
+            themes: List[str],
             news_articles: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         """GPT API 를 사용하여 포트폴리오 추천을 생성합니다.
@@ -37,7 +37,8 @@ class GPTService:
             client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
             # 프롬프트 로깅
-            logger.info("GPT API 호출 준비: 테마=%s, 포트폴리오 수=%d", theme, portfolio_count)
+            themes_str = ", ".join(themes)
+            logger.info("GPT API 호출 준비: 테마=%s, 포트폴리오 수=%d", themes, portfolio_count)
             logger.info("뉴스 기사 수: %d", len(news_articles))
 
             # 뉴스 기사 요약을 위한 전처리
@@ -52,7 +53,8 @@ class GPTService:
 
             news_text = "\n\n".join(news_summaries)
 
-
+            # 테마 목록을 문자열로 변환
+            themes_list = ", ".join([f"'{theme}'" for theme in themes])
 
             #GPT에 전달할 프롬프트 구성
             prompt = f"""
@@ -60,22 +62,24 @@ class GPTService:
 
 1. 투자자는 총 {portfolio_count}개의 포트폴리오를 구성하고 싶어합니다.
 2. 각 포트폴리오는 {stocks_per_portfolio}개의 주식으로 구성되어야 합니다.
-3. 투자자가 관심 있는 테마는 '{theme}'입니다.
-4. 다음은 최근 관련 뉴스 기사입니다:  
+3. 투자자가 관심 있는 테마는 다음과 같습니다: {themes_list}
+4. 다음은 최근 관련 뉴스 기사입니다: 
 
 {news_text}
 
 위 정보를 바탕으로:
 1. {portfolio_count}개의 서로 다른 포트폴리오를 추천해주세요.
 2. 각 포트폴리오는 {stocks_per_portfolio}개의 주식으로 구성하고, 각 주식의 비율(%)을 명시해주세요.
-3. 각 포트폴리오에 대한 간략한 설명과 투자 전략을 제공해주세요.
-4. 포트폴리오 구성 시 분산투자 원칙을 고려해주세요.
+3. 각 포트폴리오는 위에 언급된 테마 중 하나 이상에 중점을 두어야 합니다.
+4. 각 포트폴리오의 주요 테마와 투자 전략을 설명해주세요.
+5. 포트폴리오 구성 시 분산투자 원칙을 고려해주세요.
 
 응답은 다음 JSON 형식으로 제공해주세요:
 ```json
 [
   {{
     "name": "포트폴리오 1",
+    "focus_themes": ["기술", "반도체"],
     "stocks": [
       {{"ticker": "AAPL", "name": "Apple Inc.", "allocation": 25.0}},
       {{"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 25.0}}
@@ -108,9 +112,6 @@ class GPTService:
 
             # 응답 내용 로깅 (일부만)
             content = response.choices[0].message.content
-            # 안전한 방식으로 로깅
-            # safe_preview = repr(content[:200] + "...")
-            # logger.info("GPT 응답 내용 (처음 200자):\n%s", safe_preview)
 
             # GPT 응답 파싱
             try:
