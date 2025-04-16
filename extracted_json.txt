@@ -1,6 +1,7 @@
 [
   {
     "name": "포트폴리오 1",
+<<<<<<< Updated upstream
     "focus_themes": ["기술", "블록체인"],
     "stocks": [
       {"ticker": "TSE:GLXY", "name": "Galaxy Digital Holdings Ltd.", "allocation": 30.0},
@@ -34,5 +35,40 @@
       {"ticker": "FB", "name": "Facebook, Inc.", "allocation": 10.0}
     ],
     "description": "이 포트폴리오는 기술과 소프트웨어 섹터를 중심으로 구성되었으며, 주요 IT 기업들의 주식에 비중을 두었습니다."
+=======
+    "focus_themes": ["기술", "디지털 자산"],
+    "stocks": [
+      {"ticker": "TSE:GLXY", "name": "Galaxy Digital Holdings Ltd.", "allocation": 30.0},
+      {"ticker": "NASDAQ:NVDA", "name": "NVIDIA Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:AAPL", "name": "Apple Inc.", "allocation": 20.0},
+      {"ticker": "NASDAQ:AMZN", "name": "Amazon.com, Inc.", "allocation": 15.0},
+      {"ticker": "NASDAQ:GOOGL", "name": "Alphabet Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 디지털 자산에 중점을 두고 있습니다. 최근 강세를 보이는 Galaxy Digital Holdings와 기술 대형주인 NVIDIA, Apple, Amazon, Alphabet를 포함하였습니다."
+  },
+  {
+    "name": "포트폴리오 2",
+    "focus_themes": ["기술", "소프트웨어"],
+    "stocks": [
+      {"ticker": "LON:EVOK", "name": "Evoke plc", "allocation": 30.0},
+      {"ticker": "NASDAQ:MSFT", "name": "Microsoft Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:ADBE", "name": "Adobe Inc.", "allocation": 20.0},
+      {"ticker": "NYSE:CRM", "name": "Salesforce.com, Inc.", "allocation": 15.0},
+      {"ticker": "NASDAQ:ZM", "name": "Zoom Video Communications, Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 소프트웨어에 초점을 맞추고 있습니다. 최근 강세를 보이는 Evoke와 소프트웨어 대형주인 Microsoft, Adobe, Salesforce, Zoom을 포함하였습니다."
+  },
+  {
+    "name": "포트폴리오 3",
+    "focus_themes": ["기술", "하드웨어"],
+    "stocks": [
+      {"ticker": "NASDAQ:AAPL", "name": "Apple Inc.", "allocation": 25.0},
+      {"ticker": "NASDAQ:INTC", "name": "Intel Corporation", "allocation": 25.0},
+      {"ticker": "NYSE:IBM", "name": "International Business Machines Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:CSCO", "name": "Cisco Systems, Inc.", "allocation": 15.0},
+      {"ticker": "NYSE:HPQ", "name": "HP Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 하드웨어에 중점을 두고 있습니다. 기술 하드웨어 대형주인 Apple, Intel, IBM, Cisco, HP를 포함하였습니다."
+>>>>>>> Stashed changes
   }
 ]

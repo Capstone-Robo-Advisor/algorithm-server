@@ -1,9 +1,14 @@
+<<<<<<< Updated upstream
 먼저, 투자자의 관심 테마인 '기술'을 중심으로 세 가지 포트폴리오를 구성하겠습니다. 또한, 투자자가 관심있어하는 각각의 주식에 대해 적절한 비율을 할당하며, 분산투자를 위해 각 포트폴리오에 다양한 회사의 주식을 포함하였습니다. 
+=======
+바탕으로 제안드린 3가지 포트폴리오는 다음과 같습니다:
+>>>>>>> Stashed changes
 
 ```json
 [
   {
     "name": "포트폴리오 1",
+<<<<<<< Updated upstream
     "focus_themes": ["기술", "블록체인"],
     "stocks": [
       {"ticker": "TSE:GLXY", "name": "Galaxy Digital Holdings Ltd.", "allocation": 30.0},
@@ -37,8 +42,47 @@
       {"ticker": "FB", "name": "Facebook, Inc.", "allocation": 10.0}
     ],
     "description": "이 포트폴리오는 기술과 소프트웨어 섹터를 중심으로 구성되었으며, 주요 IT 기업들의 주식에 비중을 두었습니다."
+=======
+    "focus_themes": ["기술", "디지털 자산"],
+    "stocks": [
+      {"ticker": "TSE:GLXY", "name": "Galaxy Digital Holdings Ltd.", "allocation": 30.0},
+      {"ticker": "NASDAQ:NVDA", "name": "NVIDIA Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:AAPL", "name": "Apple Inc.", "allocation": 20.0},
+      {"ticker": "NASDAQ:AMZN", "name": "Amazon.com, Inc.", "allocation": 15.0},
+      {"ticker": "NASDAQ:GOOGL", "name": "Alphabet Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 디지털 자산에 중점을 두고 있습니다. 최근 강세를 보이는 Galaxy Digital Holdings와 기술 대형주인 NVIDIA, Apple, Amazon, Alphabet를 포함하였습니다."
+  },
+  {
+    "name": "포트폴리오 2",
+    "focus_themes": ["기술", "소프트웨어"],
+    "stocks": [
+      {"ticker": "LON:EVOK", "name": "Evoke plc", "allocation": 30.0},
+      {"ticker": "NASDAQ:MSFT", "name": "Microsoft Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:ADBE", "name": "Adobe Inc.", "allocation": 20.0},
+      {"ticker": "NYSE:CRM", "name": "Salesforce.com, Inc.", "allocation": 15.0},
+      {"ticker": "NASDAQ:ZM", "name": "Zoom Video Communications, Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 소프트웨어에 초점을 맞추고 있습니다. 최근 강세를 보이는 Evoke와 소프트웨어 대형주인 Microsoft, Adobe, Salesforce, Zoom을 포함하였습니다."
+  },
+  {
+    "name": "포트폴리오 3",
+    "focus_themes": ["기술", "하드웨어"],
+    "stocks": [
+      {"ticker": "NASDAQ:AAPL", "name": "Apple Inc.", "allocation": 25.0},
+      {"ticker": "NASDAQ:INTC", "name": "Intel Corporation", "allocation": 25.0},
+      {"ticker": "NYSE:IBM", "name": "International Business Machines Corporation", "allocation": 20.0},
+      {"ticker": "NASDAQ:CSCO", "name": "Cisco Systems, Inc.", "allocation": 15.0},
+      {"ticker": "NYSE:HPQ", "name": "HP Inc.", "allocation": 15.0}
+    ],
+    "description": "이 포트폴리오는 기술 및 하드웨어에 중점을 두고 있습니다. 기술 하드웨어 대형주인 Apple, Intel, IBM, Cisco, HP를 포함하였습니다."
+>>>>>>> Stashed changes
   }
 ]
 ```
 
+<<<<<<< Updated upstream
 각 포트폴리오는 투자자의 관심 테마인 '기술'을 기반으로 하되, 그 외에도 블록체인, 헬스케어, 소프트웨어 등 다양한 테마를 포함하고 있습니다. 이를 통해 시장의 변동성에 대비하고, 다양한 섹터에서의 기회를 포착할 수 있습니다.
+=======
+포트폴리오 1은 기술 테마에 디지털 자산을 추가하여 블록체인 기술과 관련된 Galaxy Digital을 포함시켰습니다. 포트폴리오 2는 기술 테마에 소프트웨어를 추가하였고, 마지막 포트폴리오 3은 기술 테마에 하드웨어를 추가하여 다양한 기술 주식을 포함시켰습니다. 각 포트폴리오는 분산투자의 원칙을 따르며, 다양한 기업의 주식을 골고루 포함하여 투자자의 위험을 분산시킵니다.
+>>>>>>> Stashed changes
