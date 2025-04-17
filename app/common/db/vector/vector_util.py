@@ -1,14 +1,18 @@
 import logging
+import os
 from chromadb import PersistentClient
 
 logger = logging.getLogger(__name__)
+
+#벡터 DB 저장 경로
+persist_dir = os.getenv("VECTOR_PERSIST_PATH")
 
 # 벡터 DB 접근을 위한 유틸 클래스
 class VectorUtil:
     _chroma_client = None
     _collection = None
 
-    def __init__(self, collection_name="articles", persist_directory="./chroma_storage"):
+    def __init__(self, collection_name="articles", persist_directory=persist_dir):
         self._collection_name = collection_name
         self._persist_directory = persist_directory
 
@@ -24,7 +28,6 @@ class VectorUtil:
         return self._chroma_client
 
     # Chroma DB 컬렉션 받아 오기
-    # TODO: 오래된 기사 삭제 로직 추가하기(날짜 단위 파악하기) -> 이건 뉴스 데이터를 DB에 넣을 때 고려하기
     def get_collection(self):
         if self._collection is None:
             try:
