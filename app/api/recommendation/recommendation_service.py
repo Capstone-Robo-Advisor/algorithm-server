@@ -1,7 +1,7 @@
 import logging
 
 from typing import List, Dict, Any
-from app.legacy.news.news_service import NewsService
+from app.api.news import NewsService
 from app.common.gpt.gpt_service import GPTService
 
 # 로거 객체 선언
