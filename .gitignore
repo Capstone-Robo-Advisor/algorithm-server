@@ -13,3 +13,5 @@ venv
 
 # .env 파일
 /.env
+
+chroma_storage
