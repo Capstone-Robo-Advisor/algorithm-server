@@ -6,6 +6,7 @@ from app.api.recommendation import recommendation_route
 from app.api.stock import stock_router
 from app.api.portfolio import portfolio_route
 from app.api.member import member_route
+from app.common.crawlers.daily_news_collector import DailyNewsCollector
 
 # 전역 로깅 설정
 logging.basicConfig(
@@ -22,6 +23,27 @@ app = FastAPI(
         }
     ]
 )
+
+
+@app.on_event("startup")
+async def startup_event():
+    """애플리케이션 시작 시 실행될 이벤트"""
+    # 뉴스 수집기 초기화
+    collector = DailyNewsCollector.get_instance()
+
+    # 초기 데이터 백그라운드 수집 시작
+    import threading
+    threading.Thread(
+        target=collector.collect_initial_data,
+        daemon=True
+    ).start()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """애플리케이션 종료 시 실행될 이벤트"""
+    # 스케줄러 종료
+    collector = DailyNewsCollector.get_instance()
+    collector.shutdown()
 
 # 라우터 등록
 app.include_router(member_route.router, prefix="/api", tags=["Members"])
