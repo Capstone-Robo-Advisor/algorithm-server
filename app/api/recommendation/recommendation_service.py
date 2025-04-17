@@ -30,7 +30,7 @@ class RecommendationService:
         news_articles = rag_service.get_news_data(
             categories=themes,
             n_results=5,  # 가져올 뉴스 수
-            min_relevance_score=0.6  # 최소 관련성 점수
+            min_relevance_score=0.3  # 최소 관련성 점수
         )
 
         if not news_articles:

@@ -1,5 +1,3 @@
-기반으로 제공된 정보에 따라 아래와 같은 3개의 포트폴리오를 추천합니다:
-
 ```json
 [
   {
@@ -8,23 +6,23 @@
     "stocks": [
       {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 20.0},
       {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 20.0},
-      {"ticker": "GOOG", "name": "Google LLC", "allocation": 20.0},
-      {"ticker": "FB", "name": "Facebook, Inc.", "allocation": 20.0},
-      {"ticker": "AMZN", "name": "Amazon.com, Inc.", "allocation": 20.0}
+      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 20.0},
+      {"ticker": "AMZN", "name": "Amazon.com Inc.", "allocation": 20.0},
+      {"ticker": "FB", "name": "Facebook Inc.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 기술 섹터에 중점을 둔 주식을 선택하여, 기술 섹터의 성장 트렌드를 활용하려는 투자자에게 적합합니다."
+    "description": "이 포트폴리오는 기술 섹터에 중점을 두고 있으며, 주로 성장 중인 대형 기술 기업들로 구성되어 있습니다."
   },
   {
     "name": "포트폴리오 2",
     "focus_themes": ["반도체"],
     "stocks": [
-      {"ticker": "INTC", "name": "Intel Corporation", "allocation": 25.0},
-      {"ticker": "AMD", "name": "Advanced Micro Devices, Inc.", "allocation": 25.0},
-      {"ticker": "NVDA", "name": "NVIDIA Corporation", "allocation": 25.0},
-      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 15.0},
-      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Company Limited", "allocation": 10.0}
+      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co Ltd.", "allocation": 20.0},
+      {"ticker": "NVDA", "name": "NVIDIA Corp.", "allocation": 20.0},
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 20.0},
+      {"ticker": "AMD", "name": "Advanced Micro Devices Inc.", "allocation": 20.0},
+      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 반도체 섹터에 중점을 둔 주식을 선택하여, 반도체 산업의 기술적 진보와 성장을 활용하려는 투자자에게 적합합니다."
+    "description": "이 포트폴리오는 반도체 산업에 초점을 맞추고 있으며, 주로 전 세계적으로 인정받은 반도체 제조 기업들로 구성되어 있습니다."
   },
   {
     "name": "포트폴리오 3",
@@ -32,11 +30,11 @@
     "stocks": [
       {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 20.0},
       {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 20.0},
-      {"ticker": "NVDA", "name": "NVIDIA Corporation", "allocation": 20.0},
-      {"ticker": "AMD", "name": "Advanced Micro Devices, Inc.", "allocation": 20.0},
-      {"ticker": "INTC", "name": "Intel Corporation", "allocation": 20.0}
+      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co Ltd.", "allocation": 20.0},
+      {"ticker": "NVDA", "name": "NVIDIA Corp.", "allocation": 20.0},
+      {"ticker": "AMZN", "name": "Amazon.com Inc.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 기술과 반도체 섹터에 중점을 둔 주식을 선택하여, 두 섹터 모두에서의 성장 트렌드를 활용하려는 투자자에게 적합합니다."
+    "description": "이 포트폴리오는 기술과 반도체 섹터 모두에 중점을 두고 있으며, 각 섹터에서 가장 인기 있는 주식들로 구성되어 있습니다."
   }
 ]
 ```
