@@ -14,3 +14,4 @@ pymongo
 openai
 chromadb
 sentence-transformers
+asyncio
