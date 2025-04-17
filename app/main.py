@@ -24,19 +24,16 @@ app = FastAPI(
     ]
 )
 
-
 @app.on_event("startup")
 async def startup_event():
     """애플리케이션 시작 시 실행될 이벤트"""
+    # 로거 설정
+    # logger.info("🚀 애플리케이션 시작 중...")
+
     # 뉴스 수집기 초기화
     collector = DailyNewsCollector.get_instance()
+    await collector.collect_initial_data()
 
-    # 초기 데이터 백그라운드 수집 시작
-    import threading
-    threading.Thread(
-        target=collector.collect_initial_data,
-        daemon=True
-    ).start()
 
 @app.on_event("shutdown")
 async def shutdown_event():
