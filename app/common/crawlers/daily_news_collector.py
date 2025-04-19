@@ -27,8 +27,16 @@ class DailyNewsCollector:
     # 관심 테마 목록 - 각 키워드는 DeepSearch API 의 검색어로 사용됨
     # 이 키워드들은 포트폴리오 추천 시 사용된는 테마와 일치하도록 설정되어 있음
     DEFAULT_THEMES = [
+        "에너지",
+        "철강",
+        "건설",
+        "여행",
+        "은행",
+        "증권",
+        "반도체",
         "AI",
-        "기술"
+        "5G",
+        "부동산"
     ]
 
     # 싱글톤 인스턴스 - 전체 애플리케이션에서 하나의 인스턴스만 사용
@@ -100,7 +108,7 @@ class DailyNewsCollector:
                 keyword=theme,
                 date_from=past_date,
                 date_to=today,
-                page_limit=10  # 테마당 최대 10페이지
+                page_limit=5  # 테마당 최대 10페이지
             )
 
             if not articles:
