@@ -9,7 +9,7 @@ import logging
 load_dotenv()
 
 # 프로젝트 루트 디렉토리 계산 (app/test에서 두 단계 상위)
-project_root = Path(__file__).parent.parent.parent
+project_root = Path(__file__).parent.parent
 chroma_storage_path = str(project_root / "chroma_storage")
 
 # 환경 변수 명시적 설정

@@ -1,38 +1,38 @@
 [
   {
     "name": "포트폴리오 1",
-    "focus_themes": ["철강", "제조"],
+    "focus_themes": ["반도체", "AI"],
     "stocks": [
-      {"ticker": "X", "name": "United States Steel Corp.", "allocation": 25.0},
-      {"ticker": "NUE", "name": "Nucor Corporation", "allocation": 25.0},
-      {"ticker": "AKS", "name": "AK Steel Holding Corporation", "allocation": 25.0},
-      {"ticker": "STLD", "name": "Steel Dynamics, Inc.", "allocation": 15.0},
-      {"ticker": "SCHN", "name": "Schnitzer Steel Industries, Inc.", "allocation": 10.0}
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 20.0},
+      {"ticker": "AVGO", "name": "Broadcom Inc.", "allocation": 20.0},
+      {"ticker": "SMCI", "name": "Super Micro Computer, Inc.", "allocation": 20.0},
+      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 20.0},
+      {"ticker": "MU", "name": "Micron Technology, Inc.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 철강과 제조 산업에 초점을 맞추고 있습니다. 미국의 주요 철강 회사들로 구성되어 있으며, 철강 산업의 안정적인 성장과 제조업의 회복을 활용하고자 합니다."
+    "description": "이 포트폴리오는 반도체 및 AI 섹터에 중점을 두고 있습니다. 제안된 주식들은 각각의 분야에서 핵심 역할을 하는 기업으로, 향후 성장 가능성이 예상됩니다."
   },
   {
     "name": "포트폴리오 2",
-    "focus_themes": ["건설", "부동산"],
+    "focus_themes": ["AI"],
     "stocks": [
-      {"ticker": "CAT", "name": "Caterpillar Inc.", "allocation": 25.0},
-      {"ticker": "DE", "name": "Deere & Company", "allocation": 25.0},
-      {"ticker": "PHM", "name": "PulteGroup, Inc.", "allocation": 20.0},
-      {"ticker": "DHI", "name": "D.R. Horton, Inc.", "allocation": 20.0},
-      {"ticker": "LEN", "name": "Lennar Corporation", "allocation": 10.0}
+      {"ticker": "SMCI", "name": "Super Micro Computer, Inc.", "allocation": 25.0},
+      {"ticker": "CRM", "name": "Salesforce.com, inc.", "allocation": 25.0},
+      {"ticker": "NOW", "name": "ServiceNow, Inc.", "allocation": 25.0},
+      {"ticker": "ACN", "name": "Accenture plc", "allocation": 25.0},
+      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 0.0}
     ],
-    "description": "이 포트폴리오는 건설과 부동산 산업에 초점을 맞추고 있습니다. 건설 장비 제조업체와 주택 건설업체들로 구성되어 있으며, 건설 산업의 회복과 부동산 시장의 안정적인 성장을 활용하고자 합니다."
+    "description": "이 포트폴리오는 AI 섹터에 중점을 두고 있습니다. 이 주식들은 AI 혁신을 선도하는 기업들로, 시장 변동성 속에서도 성장 가능성을 제공합니다."
   },
   {
     "name": "포트폴리오 3",
-    "focus_themes": ["철강", "건설"],
+    "focus_themes": ["반도체"],
     "stocks": [
-      {"ticker": "X", "name": "United States Steel Corp.", "allocation": 20.0},
-      {"ticker": "NUE", "name": "Nucor Corporation", "allocation": 20.0},
-      {"ticker": "CAT", "name": "Caterpillar Inc.", "allocation": 20.0},
-      {"ticker": "DE", "name": "Deere & Company", "allocation": 20.0},
-      {"ticker": "PHM", "name": "PulteGroup, Inc.", "allocation": 20.0}
+      {"ticker": "AVGO", "name": "Broadcom Inc.", "allocation": 25.0},
+      {"ticker": "MU", "name": "Micron Technology, Inc.", "allocation": 25.0},
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 25.0},
+      {"ticker": "TSLA", "name": "Tesla Inc.", "allocation": 0.0},
+      {"ticker": "CVX", "name": "Chevron Corporation", "allocation": 0.0}
     ],
-    "description": "이 포트폴리오는 철강과 건설 산업에 모두 초점을 맞추고 있습니다. 철강 회사들과 건설 장비 제조업체들로 구성되어 있으며, 두 산업의 성장을 동시에 활용하고자 합니다."
+    "description": "이 포트폴리오는 반도체 시장에 중점을 두고 있습니다. 이 주식들은 해당 분야에서 각각 중요한 역할을 하는 기업들로, 각 기업들의 성장 가능성을 고려하여 구성하였습니다."
   }
 ]

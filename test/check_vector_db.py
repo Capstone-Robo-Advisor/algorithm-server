@@ -12,7 +12,7 @@ logger = logging.getLogger("db_check")
 load_dotenv()
 
 # 프로젝트 루트 디렉토리 계산
-project_root = Path(__file__).parent.parent.parent
+project_root = Path(__file__).parent.parent
 chroma_storage_path = str(project_root / "chroma_storage")
 os.environ["VECTOR_PERSIST_PATH"] = chroma_storage_path
 

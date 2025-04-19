@@ -108,7 +108,7 @@ class DailyNewsCollector:
                 keyword=theme,
                 date_from=past_date,
                 date_to=today,
-                page_limit=5  # 테마당 최대 10페이지
+                page_limit=10  # 테마당 최대 10페이지
             )
 
             if not articles:
