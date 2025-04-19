@@ -1,38 +1,38 @@
 [
   {
     "name": "포트폴리오 1",
-    "focus_themes": ["기술"],
+    "focus_themes": ["기술", "인공지능"],
     "stocks": [
-      {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 20.0},
-      {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 20.0},
-      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 20.0},
-      {"ticker": "AMZN", "name": "Amazon.com Inc.", "allocation": 20.0},
-      {"ticker": "FB", "name": "Facebook Inc.", "allocation": 20.0}
+      {"ticker": "INTC", "name": "Intel Corporation", "allocation": 30.0},
+      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 25.0},
+      {"ticker": "MSFT", "name": "Microsoft Corporation", "allocation": 20.0},
+      {"ticker": "IBM", "name": "International Business Machines Corporation", "allocation": 15.0},
+      {"ticker": "NVDA", "name": "NVIDIA Corporation", "allocation": 10.0}
     ],
-    "description": "이 포트폴리오는 기술 섹터에 중점을 두고 있으며, 주로 성장 중인 대형 기술 기업들로 구성되어 있습니다."
+    "description": "이 포트폴리오는 인공지능(AI) 기술에 중점을 두고 있습니다. 투자자는 기업들이 AI 기술을 개발하고 적용하는데 큰 투자를 하고 있음을 알고 있습니다. 이러한 기업들은 시장에서 큰 성장 가능성을 가지고 있습니다."
   },
   {
     "name": "포트폴리오 2",
-    "focus_themes": ["반도체"],
+    "focus_themes": ["기술", "로봇공학"],
     "stocks": [
-      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co Ltd.", "allocation": 20.0},
-      {"ticker": "NVDA", "name": "NVIDIA Corp.", "allocation": 20.0},
-      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 20.0},
-      {"ticker": "AMD", "name": "Advanced Micro Devices Inc.", "allocation": 20.0},
-      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 20.0}
+      {"ticker": "DE", "name": "John Deere", "allocation": 30.0},
+      {"ticker": "IRBT", "name": "iRobot Corporation", "allocation": 25.0},
+      {"ticker": "ISRG", "name": "Intuitive Surgical, Inc.", "allocation": 20.0},
+      {"ticker": "TRMB", "name": "Trimble Inc.", "allocation": 15.0},
+      {"ticker": "ZBRA", "name": "Zebra Technologies Corporation", "allocation": 10.0}
     ],
-    "description": "이 포트폴리오는 반도체 산업에 초점을 맞추고 있으며, 주로 전 세계적으로 인정받은 반도체 제조 기업들로 구성되어 있습니다."
+    "description": "이 포트폴리오는 로봇공학과 자동화 기술에 초점을 맞추고 있습니다. 투자자는 이 기술들이 현재 많은 산업 분야에서 활용되고 있으며, 미래에는 더욱 확대될 것으로 예상하고 있습니다."
   },
   {
     "name": "포트폴리오 3",
-    "focus_themes": ["기술", "반도체"],
+    "focus_themes": ["기술", "네트워크"],
     "stocks": [
-      {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 20.0},
-      {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 20.0},
-      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co Ltd.", "allocation": 20.0},
-      {"ticker": "NVDA", "name": "NVIDIA Corp.", "allocation": 20.0},
-      {"ticker": "AMZN", "name": "Amazon.com Inc.", "allocation": 20.0}
+      {"ticker": "CSCO", "name": "Cisco Systems, Inc.", "allocation": 30.0},
+      {"ticker": "ERIC", "name": "Ericsson", "allocation": 25.0},
+      {"ticker": "JNPR", "name": "Juniper Networks, Inc.", "allocation": 20.0},
+      {"ticker": "ANET", "name": "Arista Networks, Inc.", "allocation": 15.0},
+      {"ticker": "ZM", "name": "Zoom Video Communications, Inc.", "allocation": 10.0}
     ],
-    "description": "이 포트폴리오는 기술과 반도체 섹터 모두에 중점을 두고 있으며, 각 섹터에서 가장 인기 있는 주식들로 구성되어 있습니다."
+    "description": "이 포트폴리오는 네트워크 기술에 중점을 두고 있습니다. 투자자는 네트워크 기술이 우리의 일상 생활과 비즈니스 환경에서 핵심적인 역할을 하고 있으며, 미래에는 더욱 중요해질 것으로 보고 있습니다."
   }
 ]

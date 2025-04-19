@@ -37,9 +37,13 @@ class RagService:
         self.collection = collection
 
     # 뉴스 데이터를 반환
-    def get_news_data(self, categories, n_results=5, min_relevance_score=0.6):
+    def get_news_data(self, categories, n_results=5, min_relevance_score=0.3):
         """관련성 점수 기반으로 뉴스 필터링"""
-        query = comma.join(categories)
+
+        # 1. 쿼리를 자연어 문장으로 변환
+        query = f"{', '.join(categories)} 관련 산업 동향 및 뉴스 기사"
+
+        # 2. 쿼리 임베딩
         query_embedding = embedding_model.encode(query)
 
         # 더 많은 결과를 가져와서 필터링
@@ -51,14 +55,15 @@ class RagService:
 
         # 결과와 관련성 점수 결합
         news_with_scores = []
-        for i, (doc, meta, distance) in enumerate(zip(
+        for doc, meta, distance in zip(
                 results["documents"][0],
                 results["metadatas"][0],
-                results["distances"][0])):
+                results["distances"][0]):
 
             # 거리를 유사도 점수로 변환 (1에 가까울수록 유사)
             similarity_score = 1 - min(distance, 1.0)
 
+            # 3. 필터링 기준을 0.1 또는 0.2로 낮춰보기
             if similarity_score >= min_relevance_score:
                 news_with_scores.append({
                     "title": meta.get("title", ""),
@@ -70,6 +75,14 @@ class RagService:
 
         # 관련성 점수로 정렬하고 상위 n_results 반환
         news_articles = sorted(news_with_scores, key=lambda x: x["relevance_score"], reverse=True)[:n_results]
+
+        # 4. 유사도 디버깅용 로그
+        if not news_articles:
+            logger.warning(f"[RAG] '{categories}' 관련 뉴스가 유사도 기준({min_relevance_score}) 미달로 제외되었습니다.")
+        else:
+            for i, news in enumerate(news_articles):
+                logger.info(f"[RAG] 선택된 뉴스 {i+1}: 유사도={news['relevance_score']:.3f} | 제목={news['title'][:40]}")
+
         return news_articles
 
     # 뉴스 데이터를 저장

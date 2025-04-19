@@ -28,7 +28,6 @@ class DailyNewsCollector:
     # 이 키워드들은 포트폴리오 추천 시 사용된는 테마와 일치하도록 설정되어 있음
     DEFAULT_THEMES = [
         "AI",
-        "반도체",
         "기술"
     ]
 
