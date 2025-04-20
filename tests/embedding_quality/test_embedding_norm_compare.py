@@ -1,12 +1,6 @@
 """
-✅ 1. "SentenceTransformer 모델"이란?
-모델의 정의
-- 문장을 고차원 벡터로 변환해주는 모델 : 이러한 벡터는 문장 간 의미 유사도, 검색, 클러스터링 등에 사용
-즉, 사람이 읽는 "문장" 을 -> 컴퓨터가 이해할 수 있는 "숫자 벡터"로 바꿔주는 임베딩 모델
-
-SentenceTransformer = HuggingFace 기반의 문장 임베딩 툴킷
-- 내부적으로는 BERT, RoBERTTa, 또는 SBERT 등 사전 학습된 Transformer 기반 모델을 사용
-- 768차원 또는 1024차원짜리 숫자 벡터를 문장마다 반환함
+목표 : 한국어 문장 임베딩 모델들의 품질을 체계적으로 테스트하고 비교 분석하기 위한 과정
+✅ STEP1. 임베딩 벡터 노름 테스트
 """
 
 from sentence_transformers import SentenceTransformer, models
