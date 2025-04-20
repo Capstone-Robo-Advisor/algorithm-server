@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# 추가 : 벡터 DB 데이터 디렉토리 생성 및 권한 설정
+RUN mkdir -p /app/data/chroma_storage && chmod -R 777 /app/data
+
 # 필요한 패키지 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip

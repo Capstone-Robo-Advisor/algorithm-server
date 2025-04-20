@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from typing import List
 from enum import Enum
 
-from app.db.database import get_db
-from app.services.member_service import MemberService
-from app.schemas.member_sch import Member as MemberSchema
+from app.common.db.database import get_db
+from app.api.member.member_service import MemberService
+from app.api.member.dto.member_dto import Member as MemberSchema
 
 router = APIRouter()
 

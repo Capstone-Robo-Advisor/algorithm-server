@@ -1,6 +1,6 @@
 # app/models/member.py
 from sqlalchemy import Column, BigInteger, String, DateTime, Enum, func
-from app.db.database import Base
+from app.common.db.database import Base
 
 class Member(Base):
     """Member 데이터베이스 모델

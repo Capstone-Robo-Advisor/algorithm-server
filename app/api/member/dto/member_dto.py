@@ -1,4 +1,4 @@
-# app/schemas/member_sch.py
+# app/schemas/member_dto.py
 '''
 1. 데이터 검증
 API 를 통해 받거나 반환하는 Member 데이터의 형식과 타입을 검증한다.
