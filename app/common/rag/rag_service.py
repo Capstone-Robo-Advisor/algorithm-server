@@ -9,7 +9,7 @@ import logging
 
 from app.common.db.vector.vector_util import VectorUtil
 
-embedding_model = SentenceTransformer("jhgan/ko-sroberta-multitask")
+embedding_model = SentenceTransformer("BM-K/KoSimCSE-roberta")
 vector_util = VectorUtil()
 collection = vector_util.get_collection()
 
@@ -40,8 +40,21 @@ class RagService:
     def get_news_data(self, categories, n_results=5, min_relevance_score=0.3):
         """관련성 점수 기반으로 뉴스 필터링"""
 
+        # 도메인 강화 쿼리 생성
+        enriched_queries = []
+        for category in categories:
+            if "반도체" in category:
+                enriched_queries.append(f"반도체 산업 관점에서 {category}")
+            elif "기술" in category or "AI" in category:
+                enriched_queries.append(f"기술 산업 관점에서 {category}")
+            else:
+                enriched_queries.append(category)
+
         # 1. 쿼리를 자연어 문장으로 변환
-        query = f"{', '.join(categories)} 관련 산업 동향 및 뉴스 기사"
+        query = f"{', '.join(enriched_queries)} 관련 산업 동향 및 뉴스 기사"
+
+        # 로깅 추가
+        logger.info(f"[RAG] 강화된 쿼리: '{query}'")
 
         # 2. 쿼리 임베딩
         query_embedding = embedding_model.encode(query)

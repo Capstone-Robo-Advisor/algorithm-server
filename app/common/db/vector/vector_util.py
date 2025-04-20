@@ -31,7 +31,11 @@ class VectorUtil:
     def get_collection(self):
         if self._collection is None:
             try:
-                self._collection = self.__get_vector_client().get_or_create_collection(self._collection_name)
+                # 내적 거리 측정을 사용한 컬렉션 생성
+                self._collection = self.__get_vector_client().get_or_create_collection(
+                    name = self._collection_name,
+                    metadata={"hnsw:space": "ip"}
+                )
                 logger.info(f"ChromaDB collection '{self._collection_name}' 준비 완료.")
             except Exception as e:
                 logger.error("ChromaDB collection 초기화 실패", exc_info=True)

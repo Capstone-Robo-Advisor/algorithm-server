@@ -1,38 +1,38 @@
 [
   {
     "name": "포트폴리오 1",
-    "focus_themes": ["기술", "인공지능"],
+    "focus_themes": ["반도체", "AI"],
     "stocks": [
-      {"ticker": "INTC", "name": "Intel Corporation", "allocation": 30.0},
-      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 25.0},
-      {"ticker": "MSFT", "name": "Microsoft Corporation", "allocation": 20.0},
-      {"ticker": "IBM", "name": "International Business Machines Corporation", "allocation": 15.0},
-      {"ticker": "NVDA", "name": "NVIDIA Corporation", "allocation": 10.0}
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 20.0},
+      {"ticker": "AVGO", "name": "Broadcom Inc.", "allocation": 20.0},
+      {"ticker": "SMCI", "name": "Super Micro Computer, Inc.", "allocation": 20.0},
+      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 20.0},
+      {"ticker": "MU", "name": "Micron Technology, Inc.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 인공지능(AI) 기술에 중점을 두고 있습니다. 투자자는 기업들이 AI 기술을 개발하고 적용하는데 큰 투자를 하고 있음을 알고 있습니다. 이러한 기업들은 시장에서 큰 성장 가능성을 가지고 있습니다."
+    "description": "이 포트폴리오는 반도체 및 AI 섹터에 중점을 두고 있습니다. 제안된 주식들은 각각의 분야에서 핵심 역할을 하는 기업으로, 향후 성장 가능성이 예상됩니다."
   },
   {
     "name": "포트폴리오 2",
-    "focus_themes": ["기술", "로봇공학"],
+    "focus_themes": ["AI"],
     "stocks": [
-      {"ticker": "DE", "name": "John Deere", "allocation": 30.0},
-      {"ticker": "IRBT", "name": "iRobot Corporation", "allocation": 25.0},
-      {"ticker": "ISRG", "name": "Intuitive Surgical, Inc.", "allocation": 20.0},
-      {"ticker": "TRMB", "name": "Trimble Inc.", "allocation": 15.0},
-      {"ticker": "ZBRA", "name": "Zebra Technologies Corporation", "allocation": 10.0}
+      {"ticker": "SMCI", "name": "Super Micro Computer, Inc.", "allocation": 25.0},
+      {"ticker": "CRM", "name": "Salesforce.com, inc.", "allocation": 25.0},
+      {"ticker": "NOW", "name": "ServiceNow, Inc.", "allocation": 25.0},
+      {"ticker": "ACN", "name": "Accenture plc", "allocation": 25.0},
+      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 0.0}
     ],
-    "description": "이 포트폴리오는 로봇공학과 자동화 기술에 초점을 맞추고 있습니다. 투자자는 이 기술들이 현재 많은 산업 분야에서 활용되고 있으며, 미래에는 더욱 확대될 것으로 예상하고 있습니다."
+    "description": "이 포트폴리오는 AI 섹터에 중점을 두고 있습니다. 이 주식들은 AI 혁신을 선도하는 기업들로, 시장 변동성 속에서도 성장 가능성을 제공합니다."
   },
   {
     "name": "포트폴리오 3",
-    "focus_themes": ["기술", "네트워크"],
+    "focus_themes": ["반도체"],
     "stocks": [
-      {"ticker": "CSCO", "name": "Cisco Systems, Inc.", "allocation": 30.0},
-      {"ticker": "ERIC", "name": "Ericsson", "allocation": 25.0},
-      {"ticker": "JNPR", "name": "Juniper Networks, Inc.", "allocation": 20.0},
-      {"ticker": "ANET", "name": "Arista Networks, Inc.", "allocation": 15.0},
-      {"ticker": "ZM", "name": "Zoom Video Communications, Inc.", "allocation": 10.0}
+      {"ticker": "AVGO", "name": "Broadcom Inc.", "allocation": 25.0},
+      {"ticker": "MU", "name": "Micron Technology, Inc.", "allocation": 25.0},
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 25.0},
+      {"ticker": "TSLA", "name": "Tesla Inc.", "allocation": 0.0},
+      {"ticker": "CVX", "name": "Chevron Corporation", "allocation": 0.0}
     ],
-    "description": "이 포트폴리오는 네트워크 기술에 중점을 두고 있습니다. 투자자는 네트워크 기술이 우리의 일상 생활과 비즈니스 환경에서 핵심적인 역할을 하고 있으며, 미래에는 더욱 중요해질 것으로 보고 있습니다."
+    "description": "이 포트폴리오는 반도체 시장에 중점을 두고 있습니다. 이 주식들은 해당 분야에서 각각 중요한 역할을 하는 기업들로, 각 기업들의 성장 가능성을 고려하여 구성하였습니다."
   }
 ]
