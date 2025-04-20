@@ -24,3 +24,6 @@ var/
 venv/
 .venv/
 ENV/
+
+# 추가 : 로컬 벡터 DB 데이터 무시
+chroma_storage/
