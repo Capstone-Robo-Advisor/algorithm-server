@@ -46,16 +46,28 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Create .env file
-        run: |
-          cat > .env << EOF
-          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-          VECTOR_PERSIST_PATH=/app/data/chroma_storage
-          EOF
+#      - name: Create .env file
+#        run: |
+#          cat > .env << EOF
+#          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+#          VECTOR_PERSIST_PATH=/app/data/chroma_storage
+#          EOF
+#
+#      - name: Copy .env file to EC2
+#        run: |
+#          scp .env ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/algorithm-server/.env
 
-      - name: Copy .env file to EC2
+      - name: Check .env file without modifying
         run: |
-          scp .env ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/algorithm-server/.env
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            if [ -f ~/algorithm-server/.env ]; then
+              echo ".env 파일이 이미 존재합니다. 수정하지 않습니다."
+              # 민감한 정보 없이 어떤 환경 변수가 설정되어 있는지 확인
+              grep -v "PASSWORD\|KEY\|URI" ~/algorithm-server/.env | sort | grep "=" || echo "No variables found"
+            else
+              echo ".env 파일이 없습니다. 새로 생성이 필요할 수 있습니다."
+            fi
+          EOF
 
       - name: Backup Vector DB
         run: |
