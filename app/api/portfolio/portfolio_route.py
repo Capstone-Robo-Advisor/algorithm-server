@@ -1,84 +1,84 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List
+from fastapi import APIRouter, HTTPException, Body
+from typing import List, Dict, Any
+from app.api.portfolio.dto.portfolio_dto import OptimizationRequestDTO, OptimizationResultDTO
 from app.api.portfolio.portfolio_service import PortfolioService
 
 router = APIRouter()
 
-class Stock(BaseModel):
-    ticker: str
-    shares: float
-    purchase_price: float
+@router.post(
+    "/optimize",
+    summary="레거시(현재 사용되지 않으나 혹시 몰라서 놔둠",
+    response_model=OptimizationResultDTO,
+    description="티커, 종목명, 배분 비율 배열을 사용한 포트폴리오 최적화",
+    deprecated=True,
+)
+async def optimize_portfolio(request: OptimizationRequestDTO):
+    """포트폴리오 최적화 (PyPortfolio 를 사용)
 
-class Portfolio(BaseModel):
-    name: str
-    stocks: List[Stock] = []
+    - 주어진 티커 목록의 초적 배분 비율 계산
+    - 예상 수익률, 변동성, 샤프 비율 계산
 
-@router.post("/create")
-def create_portfolio(portfolio: Portfolio):
+    :param
+    - tickers: 티커 목록 (예 : ["AAPL", "MSFT", "GOOGL"])
+    - names: 회사명 목록 (예: ["Apple Inc", "Microsoft Corp", "Alphabet Inc"])
+    - allocations: (선택) 초기 배분 비율 (예: [0.3, 0.2, 0.5])
+    - period: 데이터 수집 기간 (기본값: "2y")
+    - risk_free_rate: 무위험 수익률 (기본값: 0.02)
+    :return:
     """
-    새 포트폴리오를 생성합니다.
-    """
-    portfolio_dict = {
-        "name": portfolio.name,
-        "stocks": [{"ticker": s.ticker, "shares": s.shares, "purchase_price": s.purchase_price} for s in portfolio.stocks]
-    }
-    
-    result = PortfolioService.create_portfolio(portfolio_dict)
-    if "error" in result:
-        raise HTTPException(status_code=400, detail=result["error"])
-    return {"message": "Portfolio created successfully", "portfolio": result}
+    try:
+        result = PortfolioService.optimize_portfolio(
+            tickers=request.tickers,
+            names=request.names,
+            allocations=request.allocations,
+            period=request.period,
+            risk_free_rate=request.risk_free_rate
+        )
+        return result
+    except ValueError as e:
+        # 입력값 문제 또는 최적화 계산 문제
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        # 서버 문제 또는 예상치 못한 오류
+        raise HTTPException(status_code=500, detail=f"최적화 중 오류 발생: {str(e)}")
 
-@router.get("/list")
-def list_portfolios():
-    """
-    모든 포트폴리오 목록을 반환합니다.
-    """
-    return PortfolioService.get_all_portfolios()
 
-@router.get("/{portfolio_name}")
-def get_portfolio(portfolio_name: str):
-    """
-    이름으로 포트폴리오를 찾습니다.
-    """
-    portfolio = PortfolioService.get_portfolio_by_name(portfolio_name)
-    if not portfolio:
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-    return portfolio
+@router.post(
+    "/optimize-gpt-recommendation",
+    summary="GPT API 응답을 그대로 다시 PyPortfolio 로 전달",
+    response_model=OptimizationResultDTO,
+    description="GPT API가 추천한 포트폴리오를 최적화"
+)
+async def optimize_gpt_portfolio(portfolio: Dict[str, Any] = Body(..., example={
+    "name": "포트폴리오 2",
+    "stocks": [
+        {"ticker": "TSLA", "name": "Tesla", "allocation": 30},
+        {"ticker": "CVX", "name": "Chevron", "allocation": 20}
+    ],
+    "description": "다양한 산업 전반에 걸쳐..."
+})):
+    """GPT 추천 포트폴리오 최적화
 
-@router.put("/{portfolio_name}")
-def update_portfolio(portfolio_name: str, updated_portfolio: Portfolio):
+    GPT API 가 생성한 포트폴리오 추천 형식을 그대로 받아 최적화합니다.
+    :param portfolio:
+    :return:
     """
-    기존 포트폴리오를 업데이트합니다.
-    """
-    portfolio_dict = {
-        "name": updated_portfolio.name,
-        "stocks": [{"ticker": s.ticker, "shares": s.shares, "purchase_price": s.purchase_price} for s in updated_portfolio.stocks]
-    }
-    
-    result = PortfolioService.update_portfolio(portfolio_name, portfolio_dict)
-    if not result:
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-    return {"message": "Portfolio updated successfully", "portfolio": result}
+    try:
+        # GPT 응답에서 데이터 추출
+        tickers = [stock["ticker"] for stock in portfolio["stocks"]]
+        names = [stock["name"] for stock in portfolio["stocks"]]
 
-@router.delete("/{portfolio_name}")
-def delete_portfolio(portfolio_name: str):
-    """
-    포트폴리오를 삭제합니다.
-    """
-    success = PortfolioService.delete_portfolio(portfolio_name)
-    if not success:
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-    return {"message": "Portfolio deleted successfully"}
+        # 정수 퍼센트를 소수로 변환 (30% -> 0.3)
+        allocations = [stock["allocation"] / 100 for stock in portfolio["stocks"]]
 
-@router.get("/{portfolio_name}/performance")
-def get_portfolio_performance(portfolio_name: str):
-    """
-    포트폴리오의 현재 성과를 계산합니다.
-    """
-    portfolio = PortfolioService.get_portfolio_by_name(portfolio_name)
-    if not portfolio:
-        raise HTTPException(status_code=404, detail="Portfolio not found")
-    
-    result = PortfolioService.calculate_portfolio_performance(portfolio)
-    return result
+        # 기존 최적화 서비스 활용
+        result = PortfolioService.optimize_portfolio(
+            tickers=tickers,
+            names=names,
+            allocations=allocations,
+        )
+        return result
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"잘못된 포트폴리오 형식: {str(e)}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
