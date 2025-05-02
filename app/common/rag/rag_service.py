@@ -36,11 +36,93 @@ class RagService:
         global collection
         self.collection = collection
 
-    # 뉴스 데이터를 반환
-    def get_news_data(self, categories, n_results=5, min_relevance_score=0.3):
-        """관련성 점수 기반으로 뉴스 필터링"""
+    # # 뉴스 데이터를 반환
+    # def get_news_data(self, categories, n_results=5, min_relevance_score=0.3):
+    #     """관련성 점수 기반으로 뉴스 필터링"""
+    #
+    #     # 도메인 강화 쿼리 생성
+    #     enriched_queries = []
+    #     for category in categories:
+    #         if "반도체" in category:
+    #             enriched_queries.append(f"반도체 산업 관점에서 {category}")
+    #         elif "기술" in category or "AI" in category:
+    #             enriched_queries.append(f"기술 산업 관점에서 {category}")
+    #         else:
+    #             enriched_queries.append(category)
+    #
+    #     # 1. 쿼리를 자연어 문장으로 변환
+    #     query = f"{', '.join(enriched_queries)} 관련 산업 동향 및 뉴스 기사"
+    #
+    #     # 로깅 추가
+    #     logger.info(f"[RAG] 강화된 쿼리: '{query}'")
+    #
+    #     # 2. 쿼리 임베딩
+    #     query_embedding = embedding_model.encode(query)
+    #
+    #     # 더 많은 결과를 가져와서 필터링
+    #     results = self.collection.query(
+    #         query_embeddings=[query_embedding],
+    #         n_results=n_results * 3,  # 더 많은 후보 검색
+    #         include=["documents", "metadatas", "distances"]  # 거리 정보 포함
+    #     )
+    #
+    #     # 결과와 관련성 점수 결합
+    #     news_with_scores = []
+    #     for doc, meta, distance in zip(
+    #             results["documents"][0],
+    #             results["metadatas"][0],
+    #             results["distances"][0]):
+    #
+    #         # 거리를 유사도 점수로 변환 (1에 가까울수록 유사)
+    #         similarity_score = 1 - min(distance, 1.0)
+    #
+    #         # 3. 필터링 기준을 0.1 또는 0.2로 낮춰보기
+    #         if similarity_score >= min_relevance_score:
+    #             news_with_scores.append({
+    #                 "title": meta.get("title", ""),
+    #                 "source": meta.get("publisher", ""),
+    #                 "published_date": meta.get("published_at", ""),
+    #                 "summary": doc,
+    #                 "relevance_score": similarity_score
+    #             })
+    #
+    #     # 관련성 점수로 정렬하고 상위 n_results 반환
+    #     news_articles = sorted(news_with_scores, key=lambda x: x["relevance_score"], reverse=True)[:n_results]
+    #
+    #     # 4. 유사도 디버깅용 로그
+    #     if not news_articles:
+    #         logger.warning(f"[RAG] '{categories}' 관련 뉴스가 유사도 기준({min_relevance_score}) 미달로 제외되었습니다.")
+    #     else:
+    #         for i, news in enumerate(news_articles):
+    #             logger.info(f"[RAG] 선택된 뉴스 {i+1}: 유사도={news['relevance_score']:.3f} | 제목={news['title'][:40]}")
+    #
+    #     # 후보 중에서 무작위 추출
+    #     import random
+    #     sampled = random.sample(news_with_scores, k=min(n_results, len(news_with_scores)))
+    #
+    #     return sampled
 
-        # 도메인 강화 쿼리 생성
+    def get_news_data(self, categories, n_results=5, min_relevance_score=0.3,
+                      add_diversity=False, days_ago=None, filter_by_theme=False):
+        """관련성 점수 기반으로 뉴스 필터링
+
+        Args:
+            categories: 검색할 카테고리 목록
+            n_results: 반환할 결과 수
+            min_relevance_score: 최소 유사도 점수
+            add_diversity: 다양한 쿼리 사용 여부 (기본값: False - 기존 동작 유지)
+            days_ago: 최신 기사 필터링 일수 (None이면 필터링 없음)
+            filter_by_theme: 테마 기반 추가 필터링 (기본값: False - 기존 동작 유지)
+        """
+
+        # 결과 저장용
+        all_results = []
+        seen_ids = set()  # 중복 방지
+
+        # 쿼리 목록 초기화
+        query_variations = []
+
+        # 1. 기존 도메인 강화 쿼리 생성 (기존 로직 유지)
         enriched_queries = []
         for category in categories:
             if "반도체" in category:
@@ -50,35 +132,76 @@ class RagService:
             else:
                 enriched_queries.append(category)
 
-        # 1. 쿼리를 자연어 문장으로 변환
-        query = f"{', '.join(enriched_queries)} 관련 산업 동향 및 뉴스 기사"
+        # 기본 쿼리 (기존 방식)
+        base_query = f"{', '.join(enriched_queries)} 관련 산업 동향 및 뉴스 기사"
+        query_variations.append(base_query)
 
-        # 로깅 추가
-        logger.info(f"[RAG] 강화된 쿼리: '{query}'")
+        # 다양성 추가 옵션이 켜져 있으면 추가 쿼리 생성
+        if add_diversity:
+            simple_query = f"{' '.join(categories)} 최신 동향"
+            query_variations.append(simple_query)
 
-        # 2. 쿼리 임베딩
-        query_embedding = embedding_model.encode(query)
+        # 각 쿼리에 대해 검색 수행
+        for i, query in enumerate(query_variations):
+            # 로깅 (첫 번째는 기존 로그 메시지 유지)
+            if i == 0:
+                logger.info(f"[RAG] 강화된 쿼리: '{query}'")
+            else:
+                logger.info(f"[RAG] 추가 쿼리 #{i}: '{query}'")
 
-        # 더 많은 결과를 가져와서 필터링
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=n_results * 2,  # 더 많은 후보 검색
-            include=["documents", "metadatas", "distances"]  # 거리 정보 포함
-        )
+            # 쿼리 임베딩
+            query_embedding = embedding_model.encode(query)
 
-        # 결과와 관련성 점수 결합
-        news_with_scores = []
-        for doc, meta, distance in zip(
-                results["documents"][0],
-                results["metadatas"][0],
-                results["distances"][0]):
+            # 검색 실행
+            results = self.collection.query(
+                query_embeddings=[query_embedding],
+                n_results=n_results * 2,  # 더 많은 후보 검색
+                include=["documents", "metadatas", "distances"]
+            )
 
-            # 거리를 유사도 점수로 변환 (1에 가까울수록 유사)
-            similarity_score = 1 - min(distance, 1.0)
+            # 결과 처리
+            for doc, meta, distance in zip(
+                    results["documents"][0],
+                    results["metadatas"][0],
+                    results["distances"][0]):
 
-            # 3. 필터링 기준을 0.1 또는 0.2로 낮춰보기
-            if similarity_score >= min_relevance_score:
-                news_with_scores.append({
+                # 기본 유사도 점수 계산 (기존 방식)
+                similarity_score = 1 - min(distance, 1.0)
+
+                # 기본 유사도 필터링 (기존 방식)
+                if similarity_score < min_relevance_score:
+                    continue
+
+                # 고유 ID 생성 (문서 중복 방지용)
+                doc_id = meta.get("id", "") or hash(doc + meta.get("title", ""))
+                if doc_id in seen_ids:
+                    continue
+                seen_ids.add(doc_id)
+
+                # 선택적 테마 필터링
+                if filter_by_theme and meta.get("theme"):
+                    theme_match = False
+                    for category in categories:
+                        if category.lower() in meta.get("theme", "").lower():
+                            theme_match = True
+                            break
+                    if not theme_match and i == 0:  # 첫번째(기본) 쿼리에서는 테마 확인
+                        # 테마 매치 없으면 스코어 약간 감소
+                        similarity_score *= 0.95
+
+                # 선택적 날짜 필터링
+                if days_ago and meta.get("published_at"):
+                    try:
+                        pub_date = meta.get("published_at", "").split("T")[0]
+                        cutoff_date = (datetime.now() - timedelta(days=days_ago)).strftime('%Y-%m-%d')
+                        # 오래된 기사는 스코어 약간 감소
+                        if pub_date < cutoff_date:
+                            similarity_score *= 0.95
+                    except:
+                        pass  # 날짜 파싱 오류 무시
+
+                # 결과 추가
+                all_results.append({
                     "title": meta.get("title", ""),
                     "source": meta.get("publisher", ""),
                     "published_date": meta.get("published_at", ""),
@@ -86,15 +209,20 @@ class RagService:
                     "relevance_score": similarity_score
                 })
 
-        # 관련성 점수로 정렬하고 상위 n_results 반환
-        news_articles = sorted(news_with_scores, key=lambda x: x["relevance_score"], reverse=True)[:n_results]
+        # 기존 방식과 동일하게 결과 반환
+        if not all_results and not query_variations:
+            # 기존 코드의 기본 검색 (호환성 유지)
+            return self._original_search_method(categories, n_results, min_relevance_score)
 
-        # 4. 유사도 디버깅용 로그
+        # 최종 결과 정렬 및 필터링
+        news_articles = sorted(all_results, key=lambda x: x["relevance_score"], reverse=True)[:n_results]
+
+        # 로깅 (기존 방식 유지)
         if not news_articles:
             logger.warning(f"[RAG] '{categories}' 관련 뉴스가 유사도 기준({min_relevance_score}) 미달로 제외되었습니다.")
         else:
             for i, news in enumerate(news_articles):
-                logger.info(f"[RAG] 선택된 뉴스 {i+1}: 유사도={news['relevance_score']:.3f} | 제목={news['title'][:40]}")
+                logger.info(f"[RAG] 선택된 뉴스 {i + 1}: 유사도={news['relevance_score']:.3f} | 제목={news['title'][:40]}")
 
         return news_articles
 

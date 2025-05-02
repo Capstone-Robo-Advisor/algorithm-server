@@ -24,7 +24,12 @@ def test_news_query_relevance():
     themes = ["반도체", "AI"]
 
     # 최소 유사도 점수 설정
-    articles = rag.get_news_data(categories=themes, n_results=5, min_relevance_score=0.7)
+    articles = rag.get_news_data(
+        categories=themes,
+        n_results=5,
+        min_relevance_score=0.7,
+        add_diversity=True   # 다양한 쿼리 활성화
+    )
 
     # DB 내용 확인 출력
     logger.info(f"✅ 벡터 DB 경로: {os.environ.get('VECTOR_PERSIST_PATH')}")
