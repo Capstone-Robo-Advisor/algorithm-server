@@ -1,11 +1,17 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from typing import List, Dict, Any
 from app.api.portfolio.dto.portfolio_dto import OptimizationRequestDTO, OptimizationResultDTO
 from app.api.portfolio.portfolio_service import PortfolioService
 
 router = APIRouter()
 
-@router.post("/optimize", response_model=OptimizationResultDTO)
+@router.post(
+    "/optimize",
+    summary="레거시(현재 사용되지 않으나 혹시 몰라서 놔둠",
+    response_model=OptimizationResultDTO,
+    description="티커, 종목명, 배분 비율 배열을 사용한 포트폴리오 최적화",
+    deprecated=True,
+)
 async def optimize_portfolio(request: OptimizationRequestDTO):
     """포트폴리오 최적화 (PyPortfolio 를 사용)
 
@@ -36,3 +42,43 @@ async def optimize_portfolio(request: OptimizationRequestDTO):
         # 서버 문제 또는 예상치 못한 오류
         raise HTTPException(status_code=500, detail=f"최적화 중 오류 발생: {str(e)}")
 
+
+@router.post(
+    "/optimize-gpt-recommendation",
+    summary="GPT API 응답을 그대로 다시 PyPortfolio 로 전달",
+    response_model=OptimizationResultDTO,
+    description="GPT API가 추천한 포트폴리오를 최적화"
+)
+async def optimize_gpt_portfolio(portfolio: Dict[str, Any] = Body(..., example={
+    "name": "포트폴리오 2",
+    "stocks": [
+        {"ticker": "TSLA", "name": "Tesla", "allocation": 30},
+        {"ticker": "CVX", "name": "Chevron", "allocation": 20}
+    ],
+    "description": "다양한 산업 전반에 걸쳐..."
+})):
+    """GPT 추천 포트폴리오 최적화
+
+    GPT API 가 생성한 포트폴리오 추천 형식을 그대로 받아 최적화합니다.
+    :param portfolio:
+    :return:
+    """
+    try:
+        # GPT 응답에서 데이터 추출
+        tickers = [stock["ticker"] for stock in portfolio["stocks"]]
+        names = [stock["name"] for stock in portfolio["stocks"]]
+
+        # 정수 퍼센트를 소수로 변환 (30% -> 0.3)
+        allocations = [stock["allocation"] / 100 for stock in portfolio["stocks"]]
+
+        # 기존 최적화 서비스 활용
+        result = PortfolioService.optimize_portfolio(
+            tickers=tickers,
+            names=names,
+            allocations=allocations,
+        )
+        return result
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"잘못된 포트폴리오 형식: {str(e)}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
