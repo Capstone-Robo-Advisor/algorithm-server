@@ -20,3 +20,6 @@ chroma_storage
 # macOS
 .DS_Store
 
+# 주식 cache
+app/cache
+
