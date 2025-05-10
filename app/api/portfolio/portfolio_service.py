@@ -331,7 +331,7 @@ class PortfolioService:
                         StockAllocationDTO(
                             ticker=ticker,
                             name=ticker_to_name.get(ticker, ticker),
-                            allocation=round(weight, 4)
+                            allocation=round(weight, 4) * 100
                         )
                     )
 
