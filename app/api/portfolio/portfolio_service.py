@@ -11,7 +11,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from datetime import datetime, timedelta
 
 from typing import List, Dict, Any, Optional
-from pypfopt import EfficientFrontier, risk_models, expected_returns
+from pypfopt import EfficientFrontier, risk_models, expected_returns, objective_functions
 from .dto.portfolio_dto import StockAllocationDTO, OptimizationResultDTO
 
 # 로깅 설정
@@ -313,6 +313,12 @@ class PortfolioService:
 
             # 최적화 수행
             ef = EfficientFrontier(mu, S, weight_bounds=(0, 1))
+
+            # soft 제약 : 너무 한 종목에 치우치지 않도록 L2 정규화 추가
+            ef.add_objective(objective_functions.L2_reg, gamma=0.1)
+
+            # Hard 제약 : 각 종목 최대 40% 까지만 투자
+            ef.add_constraint(lambda w: w<=0.4)
 
             # 최대 샤프 비율 포트폴리오 계산
             weights = ef.max_sharpe(risk_free_rate=risk_free_rate)
