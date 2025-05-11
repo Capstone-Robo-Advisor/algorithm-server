@@ -1,38 +1,38 @@
 [
   {
     "name": "포트폴리오 1",
-    "focus_themes": ["인공지능"],
+    "focus_themes": ["기술", "AI"],
     "stocks": [
-      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 30.0},
-      {"ticker": "CRM", "name": "Salesforce.com Inc.", "allocation": 20.0},
-      {"ticker": "NOW", "name": "ServiceNow Inc.", "allocation": 20.0},
-      {"ticker": "ACN", "name": "Accenture Plc", "allocation": 15.0},
-      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 15.0}
+      {"ticker": "AAPL", "name": "Apple Inc.", "allocation": 20.0},
+      {"ticker": "MSFT", "name": "Microsoft Corp.", "allocation": 20.0},
+      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 20.0},
+      {"ticker": "AMZN", "name": "Amazon.com Inc.", "allocation": 20.0},
+      {"ticker": "NVDA", "name": "Nvidia Corp.", "allocation": 20.0}
     ],
-    "description": "이 포트폴리오는 인공지능(AI) 테마에 중점을 두고 있습니다. Alphabet는 AI 기술의 선두주자로서, 다양한 분야에서 AI 혁신을 선도하고 있습니다. Salesforce, ServiceNow, Accenture, Qualcomm은 마찬가지로 AI 분야에서 강력한 성장 가능성을 보여주며, 이들 주식은 기업 간 협력을 통해 시너지를 창출할 수 있습니다."
+    "description": "이 포트폴리오는 기술과 AI 산업에 초점을 맞추고 있으며, 각각의 주식이 포트폴리오 내에서 동일한 비중을 차지하도록 분산투자 원칙을 적용하였습니다."
   },
   {
     "name": "포트폴리오 2",
-    "focus_themes": ["반도체"],
+    "focus_themes": ["AI"],
     "stocks": [
-      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 30.0},
-      {"ticker": "AMD", "name": "Advanced Micro Devices Inc.", "allocation": 20.0},
-      {"ticker": "NVDA", "name": "Nvidia Corp.", "allocation": 20.0},
-      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 15.0},
-      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co.", "allocation": 15.0}
+      {"ticker": "QCOM", "name": "QUALCOMM Inc.", "allocation": 25.0},
+      {"ticker": "NOW", "name": "ServiceNow Inc.", "allocation": 25.0},
+      {"ticker": "SMCI", "name": "Super Micro Computer Inc.", "allocation": 25.0},
+      {"ticker": "INTC", "name": "Intel Corp.", "allocation": 15.0},
+      {"ticker": "IBM", "name": "International Business Machines Corp.", "allocation": 10.0}
     ],
-    "description": "이 포트폴리오는 반도체 테마에 중점을 두고 있습니다. Intel, AMD, Nvidia, Qualcomm, TSM 등은 각각 반도체 분야에서 강력한 위치를 차지하고 있으며, 이루어지는 기술 혁신과 시장 패러다임 변화에 적극 대응하고 있습니다."
+    "description": "이 포트폴리오는 AI 섹터에 집중하고 있으며, 대부분의 주식이 AI 기술의 발전에 중요한 역할을 하는 기업입니다. Intel과 IBM은 비교적 작은 비중을 차지하고 있지만, 이들 회사의 AI 기술 개발을 통해 포트폴리오의 다양성을 증가시키는 역할을 합니다."
   },
   {
     "name": "포트폴리오 3",
-    "focus_themes": ["인공지능", "반도체"],
+    "focus_themes": ["반도체"],
     "stocks": [
-      {"ticker": "GOOGL", "name": "Alphabet Inc.", "allocation": 20.0},
+      {"ticker": "AMD", "name": "Advanced Micro Devices Inc.", "allocation": 30.0},
+      {"ticker": "NVDA", "name": "Nvidia Corp.", "allocation": 25.0},
       {"ticker": "INTC", "name": "Intel Corp.", "allocation": 20.0},
-      {"ticker": "CRM", "name": "Salesforce.com Inc.", "allocation": 20.0},
-      {"ticker": "NVDA", "name": "Nvidia Corp.", "allocation": 20.0},
-      {"ticker": "QCOM", "name": "Qualcomm Inc.", "allocation": 20.0}
+      {"ticker": "QCOM", "name": "QUALCOMM Inc.", "allocation": 15.0},
+      {"ticker": "TSM", "name": "Taiwan Semiconductor Manufacturing Co. Ltd.", "allocation": 10.0}
     ],
-    "description": "이 포트폴리오는 인공지능과 반도체 두 테마에 동시에 중점을 두고 있습니다. Alphabet과 Salesforce는 인공지능 테마를, Intel과 Nvidia는 반도체 테마를 대표하며, Qualcomm은 이 두 테마를 모두 충족하는 주식입니다. 이러한 다양성은 포트폴리오의 리스크를 분산시키는 동시에, 다양한 성장 기회를 제공합니다."
+    "description": "이 포트폴리오는 반도체 산업에 집중된 주식을 포함하고 있습니다. 대부분의 주식이 반도체 제조 기업이며, 이들 회사는 반도체 산업의 핵심 플레이어입니다. 이 포트폴리오는 반도체 기술의 혁신과 성장을 기대하는 투자자를 위한 것입니다."
   }
 ]

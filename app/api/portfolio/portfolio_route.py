@@ -82,3 +82,13 @@ async def optimize_gpt_portfolio(portfolio: Dict[str, Any] = Body(..., example={
         raise HTTPException(status_code=400, detail=f"잘못된 포트폴리오 형식: {str(e)}")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        # Rate Limit 오류 처리 (추가)
+        error_msg = str(e)
+        if "Rate limited" in error_msg or "Too Many Requests" in error_msg:
+            raise HTTPException(
+                status_code=429,  # Too Many Requests
+                detail="주가 데이터 API 요청 제한에 도달했습니다. 관리자에게 문의 주세요."
+            )
+        # 기타 예상치 못한 오류
+        raise HTTPException(status_code=500, detail=f"포트폴리오 최적화 중 오류 발생: {error_msg}")
