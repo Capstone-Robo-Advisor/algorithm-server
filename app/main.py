@@ -20,6 +20,14 @@ app = FastAPI(
         {
             "name" : "Stocks",
             "description" : "주식 검색 API (일부는 레거시입니다)"
+        },
+        {
+            "name" : "Portfolio",
+            "description" : "포트폴리오 최적화(PyPortfolioOpt 라이브러리 사용) 마찬가지로 일부는 레거시입니다."
+        },
+        {
+            "name" : "recommendations",
+            "description" : "GPT API 응답을 통해 포트폴리오 추천"
         }
     ]
 )
