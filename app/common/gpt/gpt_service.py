@@ -97,7 +97,7 @@ class GPTService:
 
             # GPT API 호출
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o",
                 messages=[
                     {"role": "system",
                      "content": "You are a financial advisor specialized in stock portfolio recommendations."},
